@@ -1,10 +1,5 @@
 import { NextFunction, Request, Response, Router } from "express";
-var fs = require("fs");
-
 import { BaseRoute } from "./route";
-import { MoviesNames } from './../services/movies_names';
-import { IMDB } from './../services/imdb_api';
-import { Movies } from './../services/movies';
 
 
 /**
@@ -23,13 +18,11 @@ export class IndexRoute extends BaseRoute {
    */
   public static create(router: Router) {
     //log
-    console.log('[IndexRoute::create] Creating index route.');
+    console.log("[IndexRoute::create] Creating index route.");
 
     //add home page route
     router.get("/", (req: Request, res: Response, next: NextFunction) => {
-      let mn = new MoviesNames();
-      let imdb = new IMDB();
-      new Movies(mn, imdb).getListOfMovies().then((data) => res.json(data));
+      new IndexRoute().index(req, res, next);
     });
   }
 
@@ -64,19 +57,4 @@ export class IndexRoute extends BaseRoute {
     //render template
     this.render(req, res, "index", options);
   }
-
-  public readFile(res: Response) {
-    fs.readFile(this.getFilePath(), 'utf8', function (err, data) {
-      if(err) {
-        console.log(err);
-      } else {
-        res.end( data );
-      }    
-    });
-  }
-
-  public getFilePath() {
-    return '/Users/redtailadmin/PersonalMobileProject/typescript-express-starter/src/data/movies.json'
-  }
-
 }

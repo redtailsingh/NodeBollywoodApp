@@ -2,9 +2,6 @@ import { NextFunction, Request, Response, Router } from "express";
 var fs = require("fs");
 
 import { BaseRoute } from "./route";
-import { MoviesNames } from './../services/movies_names';
-import { IMDB } from './../services/imdb_api';
-import { Movies } from './../services/movies';
 
 
 /**
@@ -23,13 +20,11 @@ export class IndexRoute extends BaseRoute {
    */
   public static create(router: Router) {
     //log
-    console.log('[IndexRoute::create] Creating index route.');
+    console.log("[IndexRoute::create] Creating index route.");
 
     //add home page route
     router.get("/", (req: Request, res: Response, next: NextFunction) => {
-      let mn = new MoviesNames();
-      let imdb = new IMDB();
-      new Movies(mn, imdb).getListOfMovies().then((data) => res.json(data));
+      new IndexRoute().readMoviesJsonFile(res);
     });
   }
 
@@ -65,18 +60,28 @@ export class IndexRoute extends BaseRoute {
     this.render(req, res, "index", options);
   }
 
-  public readFile(res: Response) {
-    fs.readFile(this.getFilePath(), 'utf8', function (err, data) {
-      if(err) {
-        console.log(err);
-      } else {
-        res.end( data );
-      }    
+  public readMoviesJsonFile(res: Response) {
+    console.log('readMoviesJsonFile() is called');
+    console.log(__dirname);
+    fs.readFile( __dirname + "/" + "movies.json", 'utf8', function (err, data) {
+        res.end( `{
+          "id": 1, 
+          "title": "Raees",
+          "url": "http://t2.gstatic.com/images?q=tbn:ANd9GcS4PwRgsY3SW8N-y6XkBrsusLKN79p5KFWwhuXBWZyG-YUhpLIb",
+          "cast": [
+            "Shah Rukh Khan", 
+            "Mahira Khan", 
+            "Nawazuddin Siddiqui", 
+            "Mohammed Zeeshan Ayyub", 
+            "Sheeba Chaddha, S",
+            "hubham Chintamani" 
+          ],
+          "genre": "Crime/Action",
+          "studio": [
+            "Red Chillies Entertainment",
+            "Excel Entertainment"
+          ]
+        }` );
     });
   }
-
-  public getFilePath() {
-    return '/Users/redtailadmin/PersonalMobileProject/typescript-express-starter/src/data/movies.json'
-  }
-
 }

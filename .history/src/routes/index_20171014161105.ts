@@ -3,8 +3,6 @@ var fs = require("fs");
 
 import { BaseRoute } from "./route";
 import { MoviesNames } from './../services/movies_names';
-import { IMDB } from './../services/imdb_api';
-import { Movies } from './../services/movies';
 
 
 /**
@@ -27,9 +25,8 @@ export class IndexRoute extends BaseRoute {
 
     //add home page route
     router.get("/", (req: Request, res: Response, next: NextFunction) => {
-      let mn = new MoviesNames();
-      let imdb = new IMDB();
-      new Movies(mn, imdb).getListOfMovies().then((data) => res.json(data));
+      // new IndexRoute().readFile(res)
+      res.end(new MoviesNames().doGetReq())
     });
   }
 

@@ -2,4 +2,3 @@
 .baseDir.ts
 dist
 node_modules
-./history
