@@ -1,14 +1,13 @@
-// import * as request from 'request';
 var cheerio = require('cheerio');
 
 export class MoviesNames {
   url: string;
 
   constructor() {
-    this.url = 'xxxxxxxx';
+    this.url = 'http://www.imdb.com/list/ls074368935/?start=1&view=detail&sort=release_date_us:desc&defaults=1&scb=0.5479821238284619';
   }
 
-  reqOptions() {
+  getRequestObject() {
     return {
       uri: this.url,
       transform: (htmlpage) => {
@@ -17,10 +16,6 @@ export class MoviesNames {
         return names;
       }
     }
-  }
-
-  logError(url) {
-    console.log(`Error: Unable to hit the URL[${url}]`)
   }
 
   parseHtml(html): string {

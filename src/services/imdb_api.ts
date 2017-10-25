@@ -11,13 +11,18 @@ export class IMDB {
 
   }
 
-  reqOptions(moviename: string) {
+  generateRequestObject(moviename: string) {
     return {
       uri: this.createUrl(moviename),
       transform: (res: string) => {
         return this.handleRes(res, moviename);
       }
     }
+  }
+
+  createUrl(moviename: string) {
+    //http://www.omdbapi.com/?t=raees&y=2017&apikey=BanMePlz
+    return `${this.baseurl}?t=${moviename}&y=2017&apikey=${this.apikey}`
   }
 
   handleRes(res: string, moviename: string): Object {
@@ -31,12 +36,21 @@ export class IMDB {
     }
   }
 
+  parseFirst(movie: string) {
+    return JSON.parse(movie)
+  }
+
   isApiResSuccess(res: Object) {
     if(res['Response'] === "True") {
       return true;
     } else {
       return false;
     }
+  }
+
+  addIdToRes(movie: Object) {
+    let newobj = {};
+    return Object.assign(newobj, movie, { id: this.count })
   }
 
   handleMovieNotFound(moviename: string) {
@@ -77,20 +91,6 @@ export class IMDB {
   addMovieTitleToRes(res: Object, moviename: string) {
     let newobj = {}
     return Object.assign(newobj, res, { Title: moviename })
-  }
-
-  parseFirst(movie: string) {
-    return JSON.parse(movie)
-  }
-
-  addIdToRes(movie: Object) {
-    let newobj = {};
-    return Object.assign(newobj, movie, { id: this.count })
-  }
-
-  createUrl(moviename: string) {
-    //http://www.omdbapi.com/?t=raees&y=2017&apikey=BanMePlz
-    return `${this.baseurl}?t=${moviename}&y=2017&apikey=${this.apikey}`
   }
 
 }

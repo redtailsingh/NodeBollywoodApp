@@ -1,38 +1,21 @@
-import * as rp from 'request-promise'
 import { IMDB } from './../services/imdb_api';
 import { MoviesNames } from './../services/movies_names';
 
+import { Http } from './http_req'
+
 export class Movies {
-  options: Object;
-  constructor(public movienames: MoviesNames, public imdb: IMDB) {
-    this.options = {}
-  }
-
-  isReqSuccess(err, res): boolean {
-    if (!err && res.statusCode == 200) {
-      return true
-    } else {
-      return false
-    }
-  }
-
-  createPromiseOption(url) {
-    return {
-      uri: url,
-      json: true
-    };
-  }
-
-  createPromise(options) {
-    return rp(options);
-  }
+  constructor(
+    public movienames: MoviesNames, 
+    public imdb: IMDB,
+    public http: Http
+  ) {}
 
   getMovieNames(): Promise<any> {
-    return rp(this.movienames.reqOptions());
+    return this.http.makeRequest(this.movienames.getRequestObject());
   }
 
   getMovie(name): Promise<any> {
-    return rp(this.imdb.reqOptions(name));
+    return this.http.makeRequest(this.imdb.generateRequestObject(name));
   }
 
   getListOfMovies(): Promise<any> {
