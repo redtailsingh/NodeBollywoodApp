@@ -5,7 +5,7 @@ export class MoviesNames {
   url: string;
 
   constructor() {
-    this.url = 'xxxxxxxxxxxxxxx';
+    this.url = 'xxxxxxxx';
   }
 
   reqOptions() {

@@ -1,6 +1,6 @@
-# TypeScript 2 + Express + Node.js
+# BollyWood App (TypeScript 2 + Express + Node.js)
 
-This is a repository to go with my article on creating an Express web application using TypeScript 2.
+It the back for an Ionic-Angular2 Bollywood Movie App that shows the list of UpComing Moives
 
 ## Install
 
