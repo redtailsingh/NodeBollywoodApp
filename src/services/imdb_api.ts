@@ -27,7 +27,7 @@ export class IMDB {
 
   handleRes(res: string, moviename: string): Object {
     let pr = this.parseFirst(res)
-    this.count += 1;
+    // this.count += 1;s
     
     if(this.isApiResSuccess(pr)) {
       return this.addIdToRes(pr);
@@ -49,16 +49,18 @@ export class IMDB {
   }
 
   addIdToRes(movie: Object) {
+    this.count += 1;
     let newobj = {};
     return Object.assign(newobj, movie, { id: this.count })
   }
 
   handleMovieNotFound(moviename: string) {
-    let withnovalue = this.returnMovieWithNoValues(moviename)
-    return this.addIdToRes(withnovalue);
+    this.count += 1;
+    let movie = this.emptyMovieObj(moviename)
+    return this.addIdToRes(movie);
   }
 
-  returnMovieWithNoValues(moviename) {
+  emptyMovieObj(moviename) {
     return {
       Title: moviename,
       Year: "N/A",

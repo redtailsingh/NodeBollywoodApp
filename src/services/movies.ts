@@ -1,6 +1,5 @@
-import { IMDB } from './../services/imdb_api';
-import { MoviesNames } from './../services/movies_names';
-
+import { IMDB } from './imdb_api';
+import { MoviesNames } from './movies_names';
 import { Http } from './http_req';
 import { Movie } from './movie';
 
@@ -22,19 +21,36 @@ export class Movies {
     return this.http.makeRequest(this.movienames.getRequestObject());
   }
 
-  toResultObject(promise) {
+  handleFailedHttpReq = (promise) => {
     return promise
-    .then(result => ( result ))
-    .catch(error => ( error ));
+    .then(result => (result))
+    .catch(error => this.imdb.handleMovieNotFound(
+      this.getMovieName(error)
+    ));
   };
 
+  getMovieName = (error: any): string => {
+    let uri = this.pareseMovieUrl(error)
+    return this.parseMovieName(uri)
+  }
+
+  pareseMovieUrl = (error: any): string => {
+    return error.options.uri
+  }
+
+  parseMovieName = (url: string): string => {
+    return url.match(new RegExp('/?t=(.*)&y='))[1]
+  }
+
   buildMovies(names): Promise<any> {
-    let list: Promise<any>[] = [];
+/*     let list: Promise<any>[] = [];
     names.forEach(name => {
       let newpromise = this.getMovie(name);
       list.push(newpromise);
     })
-    return Promise.all(list.map(this.toResultObject)).then((values) => {
+ */ 
+    let list = names.map((movie) => this.getMovie(movie))
+    return Promise.all(list.map(this.handleFailedHttpReq)).then((values) => {
       return values
     });
   }

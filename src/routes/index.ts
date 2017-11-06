@@ -32,17 +32,6 @@ export class IndexRoute extends BaseRoute {
       let imdb = new IMDB();
       let http = new Http;
       new Movies(mn, imdb, http).getMovies().then((data) => res.json({"movies":data}));
-/*       new Movies(mn, imdb, http).getMovies().then((values) => {
-        for (let i = 0; i < values.length; ++i) {
-          if (!values[i].success) {
-            res.json(values[i].error)
-            console.log("ERR: " + values[i].error);
-          } else {
-            res.json(values[i].success)
-            console.log("SUCCESS: " + values[i].result);
-          }
-        }
-      }); */
     });
   }
 
