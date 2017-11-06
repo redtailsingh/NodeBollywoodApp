@@ -17,3 +17,8 @@ And then run the grunt task to compile the TypeScript:
 To start the server run:
 
 `$ npm start`
+
+
+##Notes
+1. Url to get the imdb api 
+ 1. http://www.omdbapi.com/apikey.aspx

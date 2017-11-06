@@ -1,7 +1,8 @@
 import { IMDB } from './../services/imdb_api';
 import { MoviesNames } from './../services/movies_names';
 
-import { Http } from './http_req'
+import { Http } from './http_req';
+import { Movie } from './movie';
 
 export class Movies {
   constructor(
@@ -10,40 +11,36 @@ export class Movies {
     public http: Http
   ) {}
 
-  getMovieNames(): Promise<any> {
-    return this.http.makeRequest(this.movienames.getRequestObject());
-  }
-
-  getMovie(name): Promise<any> {
-    return this.http.makeRequest(this.imdb.generateRequestObject(name));
-  }
-
-  getListOfMovies(): Promise<any> {
+  getMovies(): Promise<any> {
     return this.getMovieNames()
       .then((names) => {
-        let list = this.createAList(names);
-        return this.allMovies(list);
+        return this.buildMovies(names);
       })
   }
 
-  createAList(names): Promise<any>[] {
+  getMovieNames(): Promise<string[]> {
+    return this.http.makeRequest(this.movienames.getRequestObject());
+  }
+
+  toResultObject(promise) {
+    return promise
+    .then(result => ( result ))
+    .catch(error => ( error ));
+  };
+
+  buildMovies(names): Promise<any> {
     let list: Promise<any>[] = [];
     names.forEach(name => {
       let newpromise = this.getMovie(name);
       list.push(newpromise);
     })
-    return list;
+    return Promise.all(list.map(this.toResultObject)).then((values) => {
+      return values
+    });
   }
 
-  allMovies(list: Promise<any>[]): Promise<any> {
-    return Promise.all(list)
-    .then((data) => {
-      return { 'movies' : data }
-    })
-    .catch((err) => {
-      console.log(err)
-      return { 'movies' : err }
-    });
+  getMovie(name): Promise<Movie> {
+    return this.http.makeRequest(this.imdb.generateRequestObject(name))
   }
 
 }

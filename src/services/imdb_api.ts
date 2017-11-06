@@ -6,7 +6,7 @@ export class IMDB {
 
   constructor() {
     this.baseurl = 'http://www.omdbapi.com/';
-    this.apikey = 'BanMePlz';
+    this.apikey = '7c48193d';
     this.count = 0
 
   }
@@ -21,7 +21,7 @@ export class IMDB {
   }
 
   createUrl(moviename: string) {
-    //http://www.omdbapi.com/?t=raees&y=2017&apikey=BanMePlz
+    //http://www.omdbapi.com/?t=raees&y=2017&apikey=7c48193d
     return `${this.baseurl}?t=${moviename}&y=2017&apikey=${this.apikey}`
   }
 
