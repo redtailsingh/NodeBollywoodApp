@@ -43,12 +43,6 @@ export class Movies {
   }
 
   buildMovies(names): Promise<any> {
-/*     let list: Promise<any>[] = [];
-    names.forEach(name => {
-      let newpromise = this.getMovie(name);
-      list.push(newpromise);
-    })
- */ 
     let list = names.map((movie) => this.getMovie(movie))
     return Promise.all(list.map(this.handleFailedHttpReq)).then((values) => {
       return values
