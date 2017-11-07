@@ -27,7 +27,6 @@ export class IMDB {
 
   handleRes(res: string, moviename: string): Object {
     let pr = this.parseFirst(res)
-    // this.count += 1;s
     
     if(this.isApiResSuccess(pr)) {
       return this.addIdToRes(pr);

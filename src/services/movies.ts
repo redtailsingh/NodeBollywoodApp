@@ -21,6 +21,18 @@ export class Movies {
     return this.http.makeRequest(this.movienames.getRequestObject());
   }
 
+  buildMovies(names): Promise<any> {
+    let list = names.map((movie) => this.getMovie(movie))
+    return Promise.all(
+      list.map((promise) => this.handleFailedHttpReq(promise))).then((values) => {
+        return values
+      });
+  }
+
+  getMovie(name): Promise<Movie> {
+    return this.http.makeRequest(this.imdb.generateRequestObject(name))
+  }
+
   handleFailedHttpReq = (promise) => {
     return promise
     .then(result => (result))
@@ -40,17 +52,6 @@ export class Movies {
 
   parseMovieName = (url: string): string => {
     return url.match(new RegExp('/?t=(.*)&y='))[1]
-  }
-
-  buildMovies(names): Promise<any> {
-    let list = names.map((movie) => this.getMovie(movie))
-    return Promise.all(list.map(this.handleFailedHttpReq)).then((values) => {
-      return values
-    });
-  }
-
-  getMovie(name): Promise<Movie> {
-    return this.http.makeRequest(this.imdb.generateRequestObject(name))
   }
 
 }
